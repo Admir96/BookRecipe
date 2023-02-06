@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from "@angular/common/http";
 
 
 import { AppComponent } from './app.component';
@@ -18,6 +19,10 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {RoutingModule} from "./Routing.module";
 import {StartComponent} from "./start/start.component";
 import {EditComponent} from "./recipes/edit/edit.component";
+import {AuthComponent} from "./auth/auth.component";
+import {AuthService} from "./Services/auth-service";
+import {loadingScreenComponent} from "./loading-screen/loading-screen.component";
+
 
 
 
@@ -33,7 +38,10 @@ import {EditComponent} from "./recipes/edit/edit.component";
     ShoppingEditComponent,
     DropDownDirective,
     StartComponent,
-    EditComponent
+    EditComponent,
+    AuthComponent,
+    loadingScreenComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -42,9 +50,10 @@ import {EditComponent} from "./recipes/edit/edit.component";
     RouterOutlet,
     RouterLinkActive,
     RouterLink,
-    RoutingModule
+    RoutingModule,
+    HttpClientModule
   ],
-  providers: [RecipesService,ShoppingListService],
+  providers: [RecipesService,ShoppingListService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
