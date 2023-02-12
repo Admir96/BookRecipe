@@ -1,7 +1,8 @@
 import {ErrorHandler, Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
-import {error} from "@angular/compiler-cli/src/transformers/util";
+import {BehaviorSubject, catchError, tap, throwError} from "rxjs";
+import {UserModel} from "../auth/user.model";
+import {Router} from "@angular/router";
 
 export interface IAuth{
 
@@ -14,8 +15,11 @@ export interface IAuth{
 }
 @Injectable()
 export class AuthService {
+User = new BehaviorSubject<UserModel>(null);
+token:string = null;
+tokenExpTimer = null;
 
-  constructor(private  http:HttpClient) {
+  constructor(private  http:HttpClient, private router:Router) {
   }
 
   signUp(email:string, password:string)
@@ -25,7 +29,9 @@ export class AuthService {
       email:email,
       password:password,
       returnSecureToken:true
-    }).pipe(catchError(this.ErrorHandler));
+    }).pipe(catchError(this.ErrorHandler),tap(response => {
+      this.HandleUserAuth(response.email,response.localId,response.idToken,+response.expiresIn);
+    }));
   }
 
   login(email:string,password:string)
@@ -35,11 +41,34 @@ export class AuthService {
       email:email,
       password:password,
       returnSecureToken:true
-    }).pipe(catchError(this.ErrorHandler));
+    }).pipe(catchError(this.ErrorHandler),tap(response => {
+        this.HandleUserAuth(response.email,response.localId, response.idToken, +response.expiresIn);
+      }));
     };
 
 
+AutoLogin(){
+  const user = JSON.parse(localStorage.getItem('userData'));
+  if(!user)
+    return;
 
+  const loadUser = new UserModel(user.email,user.id, user.token, new Date(user.expiresIn));
+
+  if(loadUser.Token)
+    this.User.next(loadUser);
+    const expTime = new Date(user.tokenExpTimer).getTime() - new Date().getTime();
+    this.AutoLogout(expTime);
+}
+  private HandleUserAuth(email:string, userId:string, idToken:string, expiresIn:number)
+  {
+     const date = new Date(new Date().getTime() + expiresIn * 1000);
+
+     const user = new UserModel(email, userId, idToken, date);
+
+     this.User.next(user);
+     this.AutoLogout(expiresIn * 1000);
+     localStorage.setItem('userData', JSON.stringify(user));
+  }
  private ErrorHandler(error:HttpErrorResponse){
     let errorMes = 'An error accurred !';
       if(!error.error || !error.error.error)
@@ -57,4 +86,20 @@ export class AuthService {
       }
       return throwError(errorMes);
     };
+
+  logout(){
+    this.User.next(null);
+    this.router.navigate(['../auth']);
+    localStorage.removeItem('userData');
+
+    if(this.tokenExpTimer)
+      clearTimeout(this.tokenExpTimer);
+    this.tokenExpTimer = null;
+  }
+
+  AutoLogout(expirationDuration:number){
+    this.tokenExpTimer = setTimeout(() =>{
+      this.logout()
+    }, expirationDuration);
+  }
 }
