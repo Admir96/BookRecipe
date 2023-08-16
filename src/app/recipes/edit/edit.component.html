@@ -1,0 +1,78 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="recipeForm">
+      <div class="row">
+        <div class="col-xs-12">
+          <button type="submit" (click)="onSubmit()" class="btn btn-success">{{editMode ? 'Update' : 'Save' }}</button>
+          <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name"
+                   class="form-control"
+                    type="text"
+                     formControlName="name">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="imagePath">Image URL</label>
+            <input id="imagePath"
+                   class="form-control"
+                   type="text"
+            formControlName="imagePath"
+            #imagePath>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+         <img [src]="imagePath.value" alt="" class="img-responsive" style="height: 80px">
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="description">Image URL</label>
+            <textarea id="description"
+                   class="form-control"
+                    rows="6"
+                    formControlName = "description">
+            </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12" formArrayName="ingredients">
+          <div class="row" *ngFor="let ingridientCtr of controls;  let i = index"
+            [formGroupName]= "i"
+            style="margin-top: 10px">
+            <div class="col-xs-8">
+              <input class="form-control"
+                      type="text"
+                     formControlName = "name">
+            </div>
+            <div class="col-xs-2">
+            <input class="form-control"
+                     type="number"
+                   formControlName = "amount">
+            </div>
+            <div class="col-xs-2">
+              <button (click)="onDeleteIngr(this.id)" class="btn btn-danger">X</button>
+            </div>
+          </div>
+          </div>
+        </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <button class="btn btn-success" type="button" (click)="onAddIngridient()">Add Ingridient</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

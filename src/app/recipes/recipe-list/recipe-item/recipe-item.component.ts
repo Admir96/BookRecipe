@@ -11,9 +11,11 @@ export class RecipeItemComponent implements OnInit {
 @Input() recipes:Recipe;
 @Input() index:number;
 
+
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

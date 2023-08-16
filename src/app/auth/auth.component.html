@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="alert alert-danger" *ngIf="isError">{{isError}}</div>
+
+    <app-loading-screen *ngIf="isLoading" style="text-align: center"></app-loading-screen>
+
+    <form #AuthForm = "ngForm"  *ngIf="!isLoading" (ngSubmit)="onSubmit(AuthForm)">
+      <div class="form-group">
+        <label for="email">email</label>
+        <input type="email" id="email" class="form-control"
+        ngModel name="email"
+        required
+        email>
+
+      </div>
+      <div class="form-group">
+        <label for="password">password</label>
+        <input type="password" id="password" class="form-control"
+        ngModel name="password"
+               required
+               minlength="6"/>
+      </div>
+      <div>
+      <button class="btn btn-primary" type="submit" [disabled]="!AuthForm.valid">{{IsLogin ? 'Login' : 'Sign in' }}</button>
+        <button class="btn btn-primary" type="button" (click)="onSwitchMode()">Switch to login</button>
+      </div>
+    </form>
+  </div>
+</div>

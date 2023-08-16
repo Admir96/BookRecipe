@@ -20,7 +20,7 @@ const appRouting: Routes = [
       {path:':id', component:RecipeDetailComponent, resolve:[RecipeResolverService]},
       {path:':id/edit', component:EditComponent, resolve:[RecipeResolverService]},
     ]},
-  {path: 'shopping-list', component: ShoppingListComponent},
+  {path: 'shopping-list', component:ShoppingListComponent },
   {path:'auth', component:AuthComponent}
 ];
 @NgModule({

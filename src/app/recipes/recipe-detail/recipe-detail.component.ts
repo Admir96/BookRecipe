@@ -12,7 +12,6 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 export class RecipeDetailComponent implements OnInit {
 recipe:Recipe;
 id:number;
-recipeChanged = this.recipeService.recipeChanged;
 
   constructor(private Router:Router,
               private recipeService: RecipesService,

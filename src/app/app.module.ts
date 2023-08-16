@@ -23,6 +23,7 @@ import {AuthComponent} from "./auth/auth.component";
 import {AuthService} from "./Services/auth-service";
 import {loadingScreenComponent} from "./loading-screen/loading-screen.component";
 import {AuthInterceptorService} from "./auth/Auth-Interceptor.service";
+import {AuthGuard} from "./auth/auth.guard";
 
 
 
@@ -54,7 +55,7 @@ import {AuthInterceptorService} from "./auth/Auth-Interceptor.service";
     RoutingModule,
     HttpClientModule
   ],
-  providers: [RecipesService,ShoppingListService, AuthService, {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptorService, multi:true}],
+  providers: [RecipesService,ShoppingListService,AuthGuard, AuthService, {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptorService, multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
