@@ -1,5 +1,6 @@
 {
   "name": "book-recipe",
+  "homepage": "https://admir96.github.io/book-recipe/",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
